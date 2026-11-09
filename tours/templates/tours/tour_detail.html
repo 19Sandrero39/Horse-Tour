@@ -1,0 +1,49 @@
+{% extends 'tours/base.html' %}
+
+{% block title %}{{ tour.title }}{% endblock %}
+
+{% block content %}
+  <header class="hero">
+    <div>{% for c in tour.categories.all %}<span class="tag">{{ c.name }}</span>{% endfor %}</div>
+    <h1>{{ tour.title }}</h1>
+    <p class="lead">{{ tour.description }}</p>
+    <p class="price-big">{{ tour.price }}</p>
+  </header>
+
+  <section class="panel">
+    <h2>Купить тур</h2>
+    {% if user.is_authenticated %}
+      <form method="post" action="{% url 'book_tour' tour.pk %}">
+        {% csrf_token %}
+        {{ booking_form.as_p }}
+        <button type="submit" class="btn">Купить</button>
+      </form>
+    {% else %}
+      <p class="muted">
+        <a href="{% url 'login' %}?next={{ request.path }}">Войдите</a>, чтобы купить тур.
+      </p>
+    {% endif %}
+  </section>
+
+  <section class="panel">
+    <h2>Комментарии</h2>
+    {% for c in comments %}
+      <div class="comment">
+        <b>{{ c.author.username }}</b>
+        <p>{{ c.text }}</p>
+      </div>
+    {% empty %}
+      <p class="muted">Пока нет комментариев.</p>
+    {% endfor %}
+
+    {% if can_comment %}
+      <form method="post" action="{% url 'add_comment' tour.pk %}" style="margin-top: 24px">
+        {% csrf_token %}
+        {{ comment_form.as_p }}
+        <button type="submit" class="btn">Отправить</button>
+      </form>
+    {% else %}
+      <p class="muted" style="margin-top: 16px">Оставлять комментарии можно после участия в туре.</p>
+    {% endif %}
+  </section>
+{% endblock %}

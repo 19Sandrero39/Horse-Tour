@@ -1,0 +1,28 @@
+{% extends 'tours/base.html' %}
+
+{% block content %}
+  <header class="hero">
+    <h1>Туры верхом.<br>И не только.</h1>
+    <p>Выберите приключение и дату.</p>
+  </header>
+
+  <div class="chips">
+    <a href="{% url 'tour_list' %}" class="chip {% if not request.GET.category %}active{% endif %}">Все</a>
+    {% for c in categories %}
+      <a href="?category={{ c.pk }}"
+         class="chip {% if request.GET.category == c.pk|stringformat:'s' %}active{% endif %}">{{ c.name }}</a>
+    {% endfor %}
+  </div>
+
+  <div class="grid">
+    {% for tour in tours %}
+      <a href="{% url 'tour_detail' tour.pk %}" class="card">
+        {% for c in tour.categories.all %}<span class="tag">{{ c.name }}</span>{% endfor %}
+        <h3>{{ tour.title }}</h3>
+        <p class="price">{{ tour.price }}</p>
+      </a>
+    {% empty %}
+      <p class="empty">Туров пока нет.</p>
+    {% endfor %}
+  </div>
+{% endblock %}

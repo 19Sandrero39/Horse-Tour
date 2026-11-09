@@ -1,0 +1,16 @@
+{% extends 'tours/base.html' %}
+
+{% block content %}
+  <header class="hero"><h1>Мои туры</h1></header>
+
+  <section class="panel">
+    {% for b in bookings %}
+      <div class="row">
+        <span>{{ b.tour.title }}</span>
+        <span class="muted">{{ b.date|date:"d.m.Y" }}, {{ b.time|time:"H:i" }}</span>
+      </div>
+    {% empty %}
+      <p class="empty">Вы пока ничего не купили.</p>
+    {% endfor %}
+  </section>
+{% endblock %}

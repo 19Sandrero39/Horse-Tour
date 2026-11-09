@@ -1,0 +1,14 @@
+{% extends 'tours/base.html' %}
+
+{% block content %}
+  <div class="auth">
+    <header class="hero"><h1>Регистрация</h1></header>
+    <section class="panel">
+      <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn">Зарегистрироваться</button>
+      </form>
+    </section>
+  </div>
+{% endblock %}
